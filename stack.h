@@ -1,3 +1,7 @@
+/* stack.h
+    Edited by Chris Qiu, 8/10/2013
+*/
+
 #define MAX_LEN_STACK 14
 
 struct stack
