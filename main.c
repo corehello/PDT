@@ -11,9 +11,13 @@ int main(int ac, char *av[])
   stack sShit, sContainor;     // the result and the temp containor to contain it
   
   // initial
-  // all cards
-  int[52] iCards = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
+  // all cards(need to be changed, it is not good here)
+  int[CARDSNUM] iCards = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
   cards_random(iCards, iCards);
+  
+  // two players
+  
+  // start the game
   return 0;
 }
 
@@ -22,7 +26,7 @@ int cards_random(int[] cards_in, int[] cards_out)
 {
   int index = 0;
   int iRand;
-  for( ; index < CARDSNUM, index++)
+  for( ; index < CARDSNUM; index++)
   {
     iRand = (int)((CARDSNUM-index)*random());
     cards_out[index] = cards_in[iRand];
@@ -34,7 +38,8 @@ int cards_random(int[] cards_in, int[] cards_out)
 // exchange two value
 int exchange(int num1, int num2)
 {
-  int temp = num1;
-  num1 = num2;
-  num2 = temp;
+  num1 = num1 + num2;
+  num2 = num1 - num2;
+  num1 = num1 - num2;
+  return 0;
 }
