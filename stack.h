@@ -33,7 +33,7 @@ int stack_pop(struct *pStack)
     }
 }
 
-/* clear stack*/
+/* clear stack */
 int stack_clear(stack *pSatck)
 {
     int index = pSatck->top;
