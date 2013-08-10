@@ -24,10 +24,18 @@ int queue_in(struct *queue, int value)
 
 int queue_out(struct *queue)
 {
-  int out_temp=out;
-  out = mod(out-1, 52);
-  queue->len--;
-  return queue->content[out_temp];
+  if (queue_len(queue) != 0)
+  {
+    int out_temp=out;
+    out = mod(out-1, 52);
+    queue->len--;
+    return queue->content[out_temp];
+  }
+  else
+  {
+    printf("this is a empty queue, no value will be out, stupid boy!");
+    return 1;
+  }
 }
 
 
