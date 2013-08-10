@@ -7,7 +7,6 @@ struct stack
 };
 
 /* push a value into a stack*/
-
 int stack_push(struct *pStack, int value)
 {
     top++;
@@ -24,7 +23,7 @@ int stack_pop(struct *pStack)
     }
     else
     {
-        int iTemp = pStack -> top;
+        int iTemp = pStack->content[pStack->top];
         top--;
         return iTemp;
     }
