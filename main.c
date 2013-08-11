@@ -12,12 +12,24 @@ int main(int ac, char *av[])
   
   // initial
   // all cards(need to be changed, it is not good here)
-  int[CARDSNUM] iCards = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
-  cards_random(iCards, iCards);
+  int[CARDSNUM] iCards_init = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
+  int[CARDSNUM] iCards_rand;
+  cards_random(iCards_init, iCards_rand);
   
   // two players
-  
+  int index = 0;
+  for ( ; index < CARDSNUM/2; index++)
+  {
+    queue_in(qPlayer1, iCards_rand[index]);
+    queue_in(qPlayer2, iCards_rand[index+CARDSNUM/2]);
+  }
   // start the game
+  while(queue_len(qPlayer1)*queue_len(qPlayer2)>0)
+  {
+    // handout a card
+    
+    // 
+  }
   return 0;
 }
 
@@ -43,3 +55,4 @@ int exchange(int num1, int num2)
   num1 = num1 - num2;
   return 0;
 }
+
