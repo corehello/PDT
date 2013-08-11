@@ -57,5 +57,28 @@ int stack_multi_pop(stack *pStack, stack *pSt_out, int iNum)
     return 0;
 }
 
-
+// get a value with index
+int stack_get(stack *pStack, int index)
+{
+    if(index > pStack->top || index < 0)
+    {
+        reutrn 1;
+    }
+    return pStack->content[pStack->index];
+}
+// find replica values in stack form top of the stack and output all values between them
+int stack_btw_replica(stack *pStack, stack *pSt_out)
+{
+    int iTop = pStack->top;
+    int iRep = pStack->content[iTop];
+    int index = iTop - 1;
+    for( ; index > -1; index-- )
+    {
+        if(iRep == stack_get(pStack, index))
+        {
+            return stack_multi_pop(pStack, pSt_out, iTop-index+1);
+        }
+    }
+    return 1;
+}
 
