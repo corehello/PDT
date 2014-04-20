@@ -16,9 +16,9 @@ void array_shuffle(int *array, size_t n)
         {
           size_t j = rand() % (i+1);
           // swap
-          array[i] = array[i] ^ array[j];
-          array[j] = array[i] ^ array[j];
-          array[i] = array[i] ^ array[j];
+          int t = array[i];
+          array[i] = array[j];
+          array[j] = t;
         }
     }
 }
