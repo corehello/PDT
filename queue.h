@@ -1,46 +1,75 @@
-/*#ifdef QUEUE_H */
+/* QUEUE.H
+      define queue as first in first out.
+   Edited by Jay Jiang, corehello@gmail.com
+             Chris Qiu, qwh005007@gmail.com 
+*/
 
 #define MAX_LEN_QUEUE 52
 
-struct queue{
+typedef struct Queue{
   int content[MAX_LEN_QUEUE];
-  int len;                  //valid value length= out>=in?out-in+1:out-in+52+1
-  int in;                   //index to point where to insert
-  int out;                  //index to point where to output
+  int length;
+  int front; 
+  int rear;
   
-};
+} Queue;
 
-/*define a function to insert a value into a queue struct*/
-
-int queue_in(struct *queue, int value)
+/* Insert an element into a queue */
+void queue_push(Queue *queue, int element)
 {
-  queue->content[queue->in] = value;
-  in = mod(in-1, 52);
-  queue->len++;
-  return 0;
-}
-
-//int queue_multi_in(struct *queue, )
-
-int queue_out(struct *queue)
-{
-  if (queue_len(queue) != 0)
+  /* If Queue is full, we cannot push an element into in */
+  if (queue->length == MAX_LEN_QUEUE)
   {
-    int out_temp=out;
-    out = mod(out-1, 52);
-    queue->len--;
-    return queue->content[out_temp];
+    printf("Queue is full.\n");
   }
   else
   {
-    printf("this is a empty queue, no value will be out, stupid boy!");
-    return 1;
+    queue->content[queue->rear] = element;
+    if(++(queue->rear) == MAX_LEN_QUEUE)
+    {
+      queue->rear = 0;
+    }
+    queue->len++;
   }
+  return;
+}
+
+/* Insert N-elements into a queue */
+void queue_npush(struct *queue, int *arr)
+{
+  int n = sizeof arr / sizeof *arr;
+  if (n > 0)
+  {
+    int i = 0;
+    for ( ; i < n; i++)
+    {
+      queue_push(queue, arr[i]);
+    }
+  }
+  return;
+}
+
+/* Pop front element of the queue */
+void queue_pop(Queue *queue)
+{
+  if (queue->length == 0)
+  {
+    printf("queue is empty.\n");
+  }
+  else
+  {
+    if(++(queue->front) == MAX_LEN_QUEUE)
+    {
+      queue->front = 0;
+    }
+    queue->length--;
+  }
+  return;
 }
 
 
-/*function to got queue struct length*/
-int queue_len(struct  *queue)
+/* Got queue length*/
+int queue_len(Queue *queue)
 {
-  return queue->len;
+  return queue->length;
 }
