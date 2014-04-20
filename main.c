@@ -1,58 +1,76 @@
 #include "queue.h"
 #include "stack.h"
 #include <math.h>
+#include "array.h"
 
 #define CARDSNUM 52
 
 int main(int ac, char *av[])
 {
-  // initial
+  void display(queue qPlayer1, queue qPlayer2, stack sPipe);
+  // Initial:
+  // 2 players
   queue qPlayer1, qPlayer2;    // two player
-  stack sShit, sContainor;     // the result and the temp containor to contain it
+  // Result
+  stack sPipe;     // the result and the temp containor to contain it
   
-  // initial
-  // all cards(need to be changed, it is not good here)
-  int[CARDSNUM] iCards_init = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
-  int[CARDSNUM] iCards_rand;
-  cards_random(iCards_init, iCards_rand);
+  // initial all cards
+  int[CARDSNUM] iCards = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
+  array_shuffle(iCards, queue_len(iCards));
   
-  // two players
+  // distribute cards to 2 players.
   int index = 0;
-  for ( ; index < CARDSNUM/2; index++)
+  for ( ; index < CARDSNUM; index++)
   {
-    queue_in(qPlayer1, iCards_rand[index]);
-    queue_in(qPlayer2, iCards_rand[index+CARDSNUM/2]);
+    queue_push(qPlayer1, iCards[index]);
+    queue_push(qPlayer2, iCards[++index]);
   }
+
   // start the game
+  int flag = 1;
+  int cast;
+  int[] alist;
   while(queue_len(qPlayer1)*queue_len(qPlayer2)>0)
   {
-    // handout a card
-    
-    // 
+    if (flag == 1)
+    {
+      cast = queue_pop(qPlayer1);
+      alist = stack_collect(cast, sPipe);
+      if !alist
+      {
+        stack_multipush(sPipe, alist);
+        flag = 2;
+      }
+      else
+      {
+        queue_multipush(qPlayer, alist);
+        stack_pop(sPipe);
+        flag = 1;
+      }
+    }
+    if (flag == 2)
+    {
+      cast = queue_pop(qPlayer2);
+      alist = collect(cast, sPipe);
+      if !alist
+      {
+        stack_multipush(sPipe, alist);
+        flag = 1;
+      }
+      else
+      {
+        queue_multipush(qPlayer2, alist);
+        stack_pop(sPipe);
+        flag = 2;
+      }
+    }
+    array_clear(alist);
   }
   return 0;
 }
 
-//  random the 52 cards
-int cards_random(int[] cards_in, int[] cards_out)
+/* display the result.*/
+void display(queue qPlayer1, queue qPlayer2, stack sPipe)
 {
-  int index = 0;
-  int iRand;
-  for( ; index < CARDSNUM; index++)
-  {
-    iRand = (int)((CARDSNUM-index)*random());
-    cards_out[index] = cards_in[iRand];
-    exchange(cards_in[iRand], cards_in[CARDSNUM-index-1]);
-  }
-  return 0;
+  // update later. 
 }
-
-// exchange two value
-int exchange(int num1, int num2)
-{
-  num1 = num1 + num2;
-  num2 = num1 - num2;
-  num1 = num1 - num2;
-  return 0;
-}
-
