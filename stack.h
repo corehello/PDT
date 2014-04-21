@@ -1,84 +1,80 @@
-/* stack.h
-    Edited by Chris Qiu, 8/10/2013
+/* STACK.H
+     first in last out.
+   Edited by Chris Qiu, 04/21/2014
 */
-
+#include <stdio.h>
 #define MAX_LEN_STACK 14
 
-struct stack
+typedef struct Stack
 {
-    int content[MAX_LEN_STACK];   // factor 
-    int top;                      // index to top of the stack, point to a valid value
-};
+    int *content;
+    int top;  // top index, if stack is null, -1
+    int length;
+} Stack;
 
-/* push a value into a stack*/
-int stack_push(struct *pStack, int value)
+/* Push an element into a stack */
+void stack_push(Stack *pStack, int element)
 {
-    top++;
-    pStack->content[pStack->top] = value;
-    return 0;
-}
-
-/* pop the top value of the stack*/
-int stack_pop(struct *pStack)
-{
-    if(pStack->top == -1)
+    if (pStack->length == MAX_LEN_STACK)
     {
-        return 1;
+      printf("stack is full.\n");
     }
     else
     {
-        int iTemp = pStack->content[pStack->top];
-        top--;
-        return iTemp;
+      pStack->length++;
+      pStack->content[++pStack->top] = element;
+    }
+    return;
+}
+
+/* Pop the top element of the stack */
+void stack_pop(Stack *pStack)
+{
+    if(pStack->top < 0)
+    {
+        printf("Stack is Empty.\n");
+    }
+    else
+    {
+        pStack->top--;
+        pStack->length--;
     }
 }
 
-/* clear stack */
-int stack_clear(stack *pSatck)
+/* Get queue length*/
+int stack_len(Stack *pStack)
 {
-    int index = pSatck->top;
-    for( ; index >= 0; index--)
-    {
-        stack_pop(pSatck);
-    }
-    // pSatck->top = -1;
-    return 0;
+  return pStack->length;
 }
 
-/* pop multi value of stack*/
-int stack_multi_pop(stack *pStack, stack *pSt_out, int iNum)
+/* Based on item, find if there is another element equals 
+   the item. If yes, pop all elements between them. else 
+   return an array with -1.
+ */
+int * stack_npop(Stack *pStack, int item)
 {
-    stack_clear(pSt_out);
-    int index = 0;
-    for( ; index<iNum; index++)
+    if(pStack->top < 0)
     {
-        stack_push( pSt_out, stack_pop(pStack->top) );
+        printf("Queue is empty.\n");
     }
-    return 0;
-}
-
-// get a value with index
-int stack_get(stack *pStack, int index)
-{
-    if(index > pStack->top || index < 0)
+    else
     {
-        reutrn 1;
-    }
-    return pStack->content[pStack->index];
-}
-// find replica values in stack form top of the stack and output all values between them
-int stack_btw_replica(stack *pStack, stack *pSt_out)
-{
-    int iTop = pStack->top;
-    int iRep = pStack->content[iTop];
-    int index = iTop - 1;
-    for( ; index > -1; index-- )
-    {
-        if(iRep == stack_get(pStack, index))
+        int i = pStack->top;
+        for(; i >= 0; i--)
         {
-            return stack_multi_pop(pStack, pSt_out, iTop-index+1);
+            if(pStack->content[i] == item)
+            {
+                int *part = malloc((pStack->top-i+2)*sizeof(int));
+                memcpy(part, pStack->content+i, (pStack->top-i+1)*sizeof(int));
+                part[pStack->top-i+1] = item;
+                pStack->top = i-1;
+                return part;
+            }
         }
     }
-    return 1;
+    // If none matches with item, then return a array filled with -1.(maybe it need to update.)
+    int *part = malloc(1*sizeof(int));
+    *part = -1;
+    return part;
 }
 
