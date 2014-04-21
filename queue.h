@@ -1,5 +1,5 @@
 /* QUEUE.H
-      define queue as first in first out.
+      Define queue as first in first out.
    Edited by Jay Jiang, corehello@gmail.com
              Chris Qiu, qwh005007@gmail.com 
 */
@@ -7,40 +7,49 @@
 #define MAX_LEN_QUEUE 52
 
 typedef struct Queue{
-  int content[MAX_LEN_QUEUE];
+  int *content;
   int length;
-  int front; 
-  int rear;
-  
+  int front;  // Point to the first element. if queue is null, 0
+  int rear;  // point to the last elements, if queue is null, -1
 } Queue;
+
+/* Create a queue */
+void * queue_init()
+{
+  Queue *queue = (Queue *)malloc(sizeof(Queue));
+  queue->content = (int *)malloc(sizeof(int)*MAX_LEN_QUEUE);
+  queue->length = 0;
+  queue->front = 0;
+  queue->rear = -1;
+  return queue;
+}
 
 /* Insert an element into a queue */
 void queue_push(Queue *queue, int element)
 {
-  /* If Queue is full, we cannot push an element into in */
+  /* If Queue is full */
   if (queue->length == MAX_LEN_QUEUE)
   {
     printf("Queue is full.\n");
   }
   else
   {
-    queue->content[queue->rear] = element;
+    queue->length++;
     if(++(queue->rear) == MAX_LEN_QUEUE)
     {
       queue->rear = 0;
     }
-    queue->len++;
+    queue->content[queue->rear] = element;
   }
   return;
 }
 
 /* Insert N-elements into a queue */
-void queue_npush(struct *queue, int *arr)
+void queue_npush(Queue *queue, int *arr, size_t n)
 {
-  int n = sizeof arr / sizeof *arr;
   if (n > 0)
   {
-    int i = 0;
+    size_t i = 0;
     for ( ; i < n; i++)
     {
       queue_push(queue, arr[i]);
