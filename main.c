@@ -7,43 +7,43 @@
 
 int main(int ac, char *av[])
 {
-  void display(queue qPlayer1, queue qPlayer2, stack sPipe);
+  void display(Queue *qPlayer1, Queue *qPlayer2, Stack *sPipe);
   // Initial:
   // 2 players
-  queue qPlayer1, qPlayer2;    // two player
+  Queue *qPlayer1 = queue_init();
+  Queue *qPlayer2 = queue_init();
   // Result
-  stack sPipe;     // the result and the temp containor to contain it
+  Stack *sPipe = stack_init();
   
   // initial all cards
-  int[CARDSNUM] iCards = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
-  array_shuffle(iCards, queue_len(iCards));
+  int iCards[CARDSNUM] = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
+  int arrlen = sizeof iCards / sizeof *iCards;
+  array_shuffle(iCards, arrlen);
   
   // distribute cards to 2 players.
-  int index = 0;
-  for ( ; index < CARDSNUM; index++)
-  {
-    queue_push(qPlayer1, iCards[index]);
-    queue_push(qPlayer2, iCards[++index]);
-  }
+  int iFirst[CARDSNUM];
+  memcpy(iFirst, iCards, CARDSNUM/2*sizeof(int));
+  qPlayer1->content = iFirst;
+  qPlayer2->content = iCards + arrlen/2;
 
   // start the game
   int flag = 1;
   int cast;
-  int[] alist;
   while(queue_len(qPlayer1)*queue_len(qPlayer2)>0)
   {
+    int *alist;
     if (flag == 1)
     {
       cast = queue_pop(qPlayer1);
-      alist = stack_collect(cast, sPipe);
+      alist = stack_npop(sPipe, cast);
       if !alist
       {
-        stack_multipush(sPipe, alist);
+        stack_npush(sPipe, alist);
         flag = 2;
       }
       else
       {
-        queue_multipush(qPlayer, alist);
+        queue_npush(qPlayer, alist);
         stack_pop(sPipe);
         flag = 1;
       }
@@ -51,26 +51,50 @@ int main(int ac, char *av[])
     if (flag == 2)
     {
       cast = queue_pop(qPlayer2);
-      alist = collect(cast, sPipe);
+      alist = stack_npop(sPipe, cast);
       if !alist
       {
-        stack_multipush(sPipe, alist);
+        stack_npush(sPipe, alist);
         flag = 1;
       }
       else
       {
-        queue_multipush(qPlayer2, alist);
+        queue_npush(qPlayer2, alist);
         stack_pop(sPipe);
         flag = 2;
       }
     }
-    array_clear(alist);
   }
   return 0;
 }
 
 /* display the result.*/
-void display(queue qPlayer1, queue qPlayer2, stack sPipe)
+void display(Queue *qPlayer1, Queue *qPlayer2, Stack *sPipe)
 {
-  // update later. 
+    // Player1
+    printf("Player1: ");
+    int i = qPlayer1->front;
+    for (; i < qPlayer1->front+qPlayer1->length ; i++ )
+    {
+        printf("%d ", qPlayer1->content[i]);
+    }
+    printf("\n");
+    
+    // Pipe
+    printf("Pipe:    ");
+    int i = 0;
+    for (; i <= sPipe->top; i++ )
+    {
+        printf("%d ", sPipe->content[i]);
+    }
+    print("\n");
+    
+    // Player2
+    printf("Player2: "); 
+    int i = qPlayer2->front;
+    for (; i < qPlayer2->front+qPlayer2->length ; i++ )        
+    {
+         printf("%d ", qPlayer2->content[i]); 
+    }
+    printf("\n"); 
 }
