@@ -12,6 +12,16 @@ typedef struct Stack
     int length;
 } Stack;
 
+/* Init stack */
+void stack_init()
+{
+    Stack *pStack = (Stack *)malloc(sizeof(Stack));
+    pStack->content = (int *)malloc(sizeof(int)*MAX_LEN_STACK);
+    pStack->top = -1;
+    pStack->length = 0;
+    return pStack;
+}
+
 /* Push an element into a stack */
 void stack_push(Stack *pStack, int element)
 {
