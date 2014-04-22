@@ -3,6 +3,7 @@
    Edited by Chris Qiu, 04/21/2014
 */
 #include <stdio.h>
+#include <stdlib.h>
 #define MAX_LEN_STACK 14
 
 typedef struct Stack
@@ -13,7 +14,7 @@ typedef struct Stack
 } Stack;
 
 /* Init stack */
-void stack_init()
+void * stack_init()
 {
     Stack *pStack = (Stack *)malloc(sizeof(Stack));
     pStack->content = (int *)malloc(sizeof(int)*MAX_LEN_STACK);
@@ -86,5 +87,22 @@ int * stack_npop(Stack *pStack, int item)
     int *part = malloc(1*sizeof(int));
     *part = -1;
     return part;
+}
+
+/* Check if cast is in pStack */
+int stack_isin(Stack *pStack, int cast)
+{
+    if(pStack->top > -1)
+    {
+        int i = pStack->top;
+        for (; i>=0 ;i-- )
+        {
+            if(pStack->content[i] == cast)
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 

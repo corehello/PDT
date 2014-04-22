@@ -4,6 +4,9 @@
              Chris Qiu, qwh005007@gmail.com 
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define MAX_LEN_QUEUE 52
 
 typedef struct Queue{
