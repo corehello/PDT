@@ -38,7 +38,8 @@ int main(int ac, char *av[])
   int cast;
   while(queue_len(qPlayer1)*queue_len(qPlayer2)>0)
   {
-    int *alist;
+    int alist[14];
+    int len_alist;
     if (flag == 1)
     {
       cast = qPlayer1->content[qPlayer1->front];
@@ -51,15 +52,12 @@ int main(int ac, char *av[])
       }
       else
       {
-        alist = stack_npop(sPipe, cast);
-        int f=0;
-        for (; f<sizeof alist/sizeof *alist; f++)
-        { printf("%d ",alist[f]);}
-        queue_npush(qPlayer1, alist, sizeof alist / sizeof *alist);
+        len_alist = stack_npop(sPipe, cast, alist);
+        queue_npush(qPlayer1, alist, len_alist);
         flag = 1;
       }
+      display(qPlayer1, qPlayer2, sPipe);
     }
-    display(qPlayer1, qPlayer2, sPipe);
     
     if (flag == 2)
     {
@@ -72,12 +70,12 @@ int main(int ac, char *av[])
       }
       else
       {
-        alist = stack_npop(sPipe, cast);
-        queue_npush(qPlayer2, alist, sizeof alist / sizeof *alist);
+        len_alist = stack_npop(sPipe, cast, alist);
+        queue_npush(qPlayer2, alist, len_alist);
         flag = 2;
       }
+      display(qPlayer1, qPlayer2, sPipe);
     }
-    display(qPlayer1, qPlayer2, sPipe);
     
   }
   printf("Game over!");
