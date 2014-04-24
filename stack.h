@@ -62,7 +62,7 @@ int stack_len(Stack *pStack)
    the item. If yes, pop all elements between them. else 
    return an array with -1.
  */
-int * stack_npop(Stack *pStack, int item)
+int stack_npop(Stack *pStack, int item, int *part)
 {
     if(pStack->top < 0)
     {
@@ -75,18 +75,18 @@ int * stack_npop(Stack *pStack, int item)
         {
             if(pStack->content[i] == item)
             {
-                int *part = malloc((pStack->top-i+2)*sizeof(int));
+                int len_part = pStack->top-i+2;
                 memcpy(part, pStack->content+i, (pStack->top-i+1)*sizeof(int));
                 part[pStack->top-i+1] = item;
+                part[pStack->top-i+2] = -1;
                 pStack->top = i-1;
-                return part;
+                return len_part;;
             }
         }
     }
-    // If none matches with item, then return a array filled with -1.(maybe it need to update.)
-    int *part = malloc(1*sizeof(int));
+    // If none matches with item, then return a array with first element equals -1.
     *part = -1;
-    return part;
+    return 1;
 }
 
 /* Check if cast is in pStack */
